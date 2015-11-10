@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.3)
+include(CMakeForceCompiler)
 
 project(fruitymesh)
 
-set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR cortex-m0plus)
 
 enable_language(CXX C)
 
 set(MAIN_TARGET        ${PROJECT_NAME}.elf)
+
+set(BUILD_SHARED_LIBS OFF)
 
 # Toolchain path
 
@@ -94,7 +98,7 @@ set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -std=gnu99 -mcpu=cortex-m0 -mthumb -Og -
 
 # Linker flags
 set(CMAKE_EXE_LINKER_FLAGS
-        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/Debug -lCMSIS -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T${CMAKE_SOURCE_DIR}/linker/cmake_gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs")
+        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/release -lCMSIS --entry main  -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T${CMAKE_SOURCE_DIR}/linker/cmake_gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs")
 
 add_executable(${MAIN_TARGET} ${FRUITY_FILES} ${C_FILES})
 
