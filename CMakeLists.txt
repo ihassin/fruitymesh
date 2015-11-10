@@ -22,8 +22,8 @@ set(SIZE_COMMAND        ${tools}/bin/arm-none-eabi-size)
 set(OBJCOPY_COMMAND     ${tools}/bin/arm-none-eabi-objcopy)
 
 # NRF related
-set(HOME                    /Users/ThoughtWorks)
-set(NRF_ROOT                ${HOME}/nrf)
+#set(HOME                    /Users/ThoughtWorks)
+set(NRF_ROOT                $ENV{HOME}/nrf)
 set(NRF_SDK                 ${NRF_ROOT}/sdk)
 set(NRF_SDK_ROOT            ${NRF_SDK}/nrf51_sdk_latest)
 set(SDK_COMPONENTS          ${NRF_SDK_ROOT}/components)
