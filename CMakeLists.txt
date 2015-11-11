@@ -1,19 +1,8 @@
 cmake_minimum_required(VERSION 3.3)
-include(CMakeForceCompiler)
 
 project(fruitymesh)
 
-set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_SYSTEM_PROCESSOR cortex-m0plus)
-
-enable_language(CXX C)
-
-set(MAIN_TARGET        ${PROJECT_NAME}.elf)
-
-set(BUILD_SHARED_LIBS OFF)
-
 # Toolchain path
-
 set(tools /usr/local/gcc-arm-none-eabi-4_9-2015q2)
 
 set(CMAKE_CXX_COMPILER  ${tools}/bin/arm-none-eabi-g++)
@@ -21,8 +10,14 @@ set(CMAKE_C_COMPILER    ${tools}/bin/arm-none-eabi-gcc)
 set(SIZE_COMMAND        ${tools}/bin/arm-none-eabi-size)
 set(OBJCOPY_COMMAND     ${tools}/bin/arm-none-eabi-objcopy)
 
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR cortex-m0plus)
+
+#enable_language(CXX C)
+
+set(MAIN_TARGET        ${PROJECT_NAME}.elf)
+
 # NRF related
-#set(HOME                    /Users/ThoughtWorks)
 set(NRF_ROOT                $ENV{HOME}/nrf)
 set(NRF_SDK                 ${NRF_ROOT}/sdk)
 set(NRF_SDK_ROOT            ${NRF_SDK}/nrf51_sdk_latest)
@@ -93,12 +88,12 @@ set(FRUITY_FILES
 )
 
 # Compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -flto -fno-move-loop-invariants -Wextra -g3 -DBLE_STACK_SUPPORT_REQD -DDEBUG -g -O0 -DBOARD_PCA10031 -DNRF51 -D__need___va_list -w -fabi-version=0 -fno-exceptions -fno-rtti -fno-use-cxa-atexit -fno-threadsafe-statics -DENABLE_LOGGING")
-set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -std=gnu99 -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -flto -fno-move-loop-invariants -Wextra -g3 -DBLE_STACK_SUPPORT_REQD -DDEBUG -g -O0 -DBOARD_PCA10031 -DNRF51 -D__need___va_list -w -fabi-version=0 -fno-exceptions -fno-rtti -fno-use-cxa-atexit -fno-threadsafe-statics -DENABLE_LOGGING")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -flto -fno-move-loop-invariants -Wextra -g3 -DBLE_STACK_SUPPORT_REQD -DDEBUG -g -O1 -DBOARD_PCA10031 -DNRF51 -D__need___va_list -w -fabi-version=0 -fno-exceptions -fno-rtti -fno-use-cxa-atexit -fno-threadsafe-statics -DENABLE_LOGGING")
+set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -std=gnu99 -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -flto -fno-move-loop-invariants -Wextra -g3 -DBLE_STACK_SUPPORT_REQD -DDEBUG -g -O1 -DBOARD_PCA10031 -DNRF51 -D__need___va_list -w -fabi-version=0 -fno-exceptions -fno-rtti -fno-use-cxa-atexit -fno-threadsafe-statics -DENABLE_LOGGING")
 
 # Linker flags
 set(CMAKE_EXE_LINKER_FLAGS
-        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/release -lCMSIS --entry main  -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T${CMAKE_SOURCE_DIR}/linker/cmake_gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs")
+        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/debug -lCMSIS -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T${CMAKE_SOURCE_DIR}/linker/cmake_gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs")
 
 add_executable(${MAIN_TARGET} ${FRUITY_FILES} ${C_FILES})
 
@@ -107,6 +102,4 @@ add_custom_command(
         COMMAND ${SIZE_COMMAND} ${MAIN_TARGET}
         COMMAND ${OBJCOPY_COMMAND} -O ihex ${MAIN_TARGET} ${PROJECT_NAME}.hex # convert .elf to .hex (redundancy: only one of either .hex or .bin is needed)
         COMMAND ${OBJCOPY_COMMAND} -O binary ${MAIN_TARGET} ${PROJECT_NAME}.bin # convert .elf to .hex
-#        COMMAND srec_cat ${MBED_SRC_PATH}/targets/hal/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s110_nrf51822_7_1_0/s110_nrf51822_7.1.0_softdevice.hex -intel ${PROJECT_NAME}.bin -binary -offset 0x16000 -o combined.hex -intel
-        COMMAND ./flash.sh
 )
