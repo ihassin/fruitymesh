@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.3)
 
 project(fruitymesh)
 
+SET(CMAKE_SYSTEM_NAME Generic)
+include (CMakeForceCompiler)
+CMAKE_FORCE_C_COMPILER(/usr/local/gcc-arm-none-eabi-4_9-2015q2/bin/arm-none-eabi-gcc GNU)
+CMAKE_FORCE_CXX_COMPILER(/usr/local/gcc-arm-none-eabi-4_9-2015q2/bin/arm-none-eabi-g++ GNU)
+
 # Toolchain path
 set(tools /usr/local/gcc-arm-none-eabi-4_9-2015q2)
 
@@ -93,7 +98,7 @@ set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -std=gnu99 -mcpu=cortex-m0 -mthumb -Og -
 
 # Linker flags
 set(CMAKE_EXE_LINKER_FLAGS
-        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/debug -lCMSIS -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T${CMAKE_SOURCE_DIR}/linker/cmake_gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs")
+        "-L${EHAL_PATH}/ARM/Nordic/nRF51/CMSIS/debug -lCMSIS -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -flto -fno-move-loop-invariants -Wextra -g3 -T../gcc_nrf51_s130_32kb.ld -Xlinker --gc-sections -Wl,-Map,\"${CMAKE_SOURCE_DIR}/build/FruityMesh.map\" --specs=nano.specs -lc -lnosys")
 
 add_executable(${MAIN_TARGET} ${FRUITY_FILES} ${C_FILES})
 
